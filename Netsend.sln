@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netsend.Networking", "Netsend.Networking\Netsend.Networking.csproj", "{6ECD7A8E-909B-44E7-94CA-3F5B236E45A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netsend.UI.Common", "Netsend.UI.Common\Netsend.UI.Common.csproj", "{A85C267E-B018-47E8-B6A0-C472BFF8D082}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netsend.BackgroundServices", "Netsend.BackgroundServices\Netsend.BackgroundServices.csproj", "{62CEE5BD-D863-4FEF-B4A7-7A70414A9BB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6ECD7A8E-909B-44E7-94CA-3F5B236E45A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ECD7A8E-909B-44E7-94CA-3F5B236E45A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ECD7A8E-909B-44E7-94CA-3F5B236E45A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ECD7A8E-909B-44E7-94CA-3F5B236E45A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A85C267E-B018-47E8-B6A0-C472BFF8D082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A85C267E-B018-47E8-B6A0-C472BFF8D082}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A85C267E-B018-47E8-B6A0-C472BFF8D082}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A85C267E-B018-47E8-B6A0-C472BFF8D082}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62CEE5BD-D863-4FEF-B4A7-7A70414A9BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62CEE5BD-D863-4FEF-B4A7-7A70414A9BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62CEE5BD-D863-4FEF-B4A7-7A70414A9BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62CEE5BD-D863-4FEF-B4A7-7A70414A9BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
