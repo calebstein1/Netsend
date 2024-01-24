@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.Net;
 using Netsend.Models;
 using Netsend.Networking;
 
@@ -5,8 +7,10 @@ namespace Netsend.BackgroundServices;
 
 public class Worker : BackgroundService
 {
-    public List<ClientInfo> FoundClients = [];
-    private int pingCounter = 0;
+    public static ObservableCollection<ClientInfo> FoundClients { get; } = [];
+    private List<ClientInfo> _clientsToDelete = [];
+    private int _pingCounter;
+    private IPAddress[] _localIPs = Dns.GetHostAddresses(Dns.GetHostName());
     private readonly ILogger<Worker> _logger;
 
     public Worker(ILogger<Worker> logger)
@@ -18,35 +22,33 @@ public class Worker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            /*if (_logger.IsEnabled(LogLevel.Information))
+            _clientsToDelete = FoundClients.Where(c => c.PingCounter < _pingCounter - 5).ToList();
+            foreach(var client in _clientsToDelete)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }*/
+                FoundClients.Remove(client);
+            }
 
-            FoundClients.RemoveAll(c => c.PingCounter < pingCounter - 5);
-            
             NetworkDiscovery.BroadcastService();
             var foundClient = NetworkDiscovery.FindService();
-            if (FoundClients.All(c => !Equals(c.Client.Address, foundClient.Address)))
+            var alreadyDiscovered = FoundClients.Any(c => c.Client.Address.Equals(foundClient.Address) ||
+                                                                      c.Client.Hostname.Equals(foundClient.Hostname));
+            var isLocalMachine = foundClient.Hostname.Equals(Dns.GetHostName()) ||
+                                 _localIPs.Any(ip => ip.Equals(foundClient.Address));
+            
+            if (!alreadyDiscovered && !isLocalMachine)
             {
-                FoundClients.Add(new ClientInfo(foundClient, pingCounter));
+                FoundClients.Add(new ClientInfo(foundClient, _pingCounter));
             }
             else
             {
-                foreach (var client in FoundClients.Where(c => Equals(c.Client.Address, foundClient.Address)))
-                {
-                    client.PingCounter = pingCounter;
-                }
+                var clientToUpdate = FoundClients.FirstOrDefault(c => Equals(c.Client.Address, foundClient.Address));
+                if (clientToUpdate != null)
+                    clientToUpdate.PingCounter = _pingCounter;
             }
 
-            Console.WriteLine($"Operation {pingCounter}: {FoundClients.Count} clients discovered");
-            /*foreach (var client in FoundClients)
-            {
-                Console.WriteLine(client.Address);
-            }
-            Console.WriteLine("\n");*/
+            Console.WriteLine($"Operation {_pingCounter}: {FoundClients.Count} clients discovered");
 
-            pingCounter++;
+            _pingCounter++;
             await Task.Delay(1000, stoppingToken);
         }
     }

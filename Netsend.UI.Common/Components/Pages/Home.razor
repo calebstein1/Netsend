@@ -1,0 +1,46 @@
+﻿@page "/"
+@using Netsend.Models
+@using System.Net
+@using System.Collections.Specialized
+@rendermode InteractiveServer
+
+<PageTitle>Netsend</PageTitle>
+
+<h1 class="text-center">Netsend</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Hostname</th>
+        <th>IP Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var client in BackgroundServices.Worker.FoundClients)
+    {
+        <tr>
+            <td>@client.Client.Hostname</td>
+            <td>@client.Client.Address</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        BackgroundServices.Worker.FoundClients.CollectionChanged += ClientsUpdated;
+    }
+
+    public void Dispose()
+    {
+        BackgroundServices.Worker.FoundClients.CollectionChanged -= ClientsUpdated;
+    }
+
+    private void ClientsUpdated(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        Console.WriteLine("Hey I'm updated");
+        InvokeAsync(StateHasChanged);
+    }
+}
