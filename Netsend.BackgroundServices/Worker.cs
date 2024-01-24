@@ -13,14 +13,15 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        NetworkService.BroadcastService();
         while (!stoppingToken.IsCancellationRequested)
         {
-            if (_logger.IsEnabled(LogLevel.Information))
+            /*if (_logger.IsEnabled(LogLevel.Information))
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }
+            }*/
 
+            var foundClient = NetworkService.FindService();
+            Console.WriteLine($"Message: \"{foundClient.BroadcastMessage}\" was received from {foundClient.SourceAddress}");
             NetworkService.BroadcastService();
             await Task.Delay(5000, stoppingToken);
         }

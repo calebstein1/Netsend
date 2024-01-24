@@ -2,12 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Netsend.Models\Netsend.Models.fsproj" />
+        <Compile Include="Library.fs"/>
     </ItemGroup>
 
 </Project>
