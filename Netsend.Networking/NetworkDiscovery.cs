@@ -5,15 +5,16 @@ using Netsend.Models;
 
 namespace Netsend.Networking;
 
-public static class NetworkService
+public static class NetworkDiscovery
 {
     private static int _port = 54545;
     private static UdpClient _udpClient = new UdpClient();
     private static UdpClient _receivingUdpClient = new UdpClient(_port);
     private static IPEndPoint _remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+    
     public static void BroadcastService()
     {
-        var data = "I'm coming from Linux"u8.ToArray();
+        var data = Dns.GetHostName().Select(c => (byte)c).ToArray();
         _udpClient.Send(data, data.Length, "255.255.255.255", _port);
     }
 

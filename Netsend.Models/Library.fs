@@ -3,6 +3,6 @@
 open System.Net
 
 type FoundClient = {
-    BroadcastMessage: string
-    SourceAddress: IPAddress
+    Hostname: string
+    Address: IPAddress
 }
