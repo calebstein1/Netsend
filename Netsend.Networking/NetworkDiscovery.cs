@@ -14,15 +14,17 @@ public static class NetworkDiscovery
     
     public static void BroadcastService()
     {
-        var data = Dns.GetHostName().Select(c => (byte)c).ToArray();
+        var hostname= Dns.GetHostName();
+        var os = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+        var data = $"{hostname},{os}".Select(c => (byte)c).ToArray();
         _udpClient.Send(data, data.Length, "255.255.255.255", _port);
     }
 
     public static FoundClient FindService()
     {
         var receiveBytes = _receivingUdpClient.Receive(ref _remoteIpEndPoint);
-        var returnData = Encoding.ASCII.GetString(receiveBytes);
+        var returnData = Encoding.ASCII.GetString(receiveBytes).Split(',');
 
-        return new FoundClient(returnData, _remoteIpEndPoint.Address);
+        return new FoundClient(_remoteIpEndPoint.Address, returnData[0], returnData[1]);
     }
 }

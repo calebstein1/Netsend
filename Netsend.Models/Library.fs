@@ -3,6 +3,7 @@
 open System.Net
 
 type FoundClient = {
-    Hostname: string
     Address: IPAddress
+    Hostname: string
+    OS: string
 }
