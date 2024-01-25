@@ -20,14 +20,13 @@ Netsend.Models defines the data structures used by other libraries.
 This library is written in F# for its cleaner syntax, type safety, and immutability.
 
 The UI is contained in Netsend.UI.Common.
-This is a Blazor app that starts the BackgroundServices executable and acts as an interface for it.
-The target distribution method will be Electron.NET as this seems to be a cleaner approach, especially coming from web dev, than trying to use a traditional UI toolkit.
+This is an AvaloniaUI project that uses the MVVM architecture to recieve and display data from the BackgroundServices worker, as well as control its functionality.
 Ultimately there will be additional UI libraries (Netsend.UI.Windows, Netsend.UI.Linux, Netsend.UI.Mac) which will implement platform-specific bits such as a system tray icon and maybe file explorer integration, but this is all stuff to be added at the end.
 
 ## Progress
 
 Currently, the app runs, advertises itself on the local network over UDP, and will discover other instances of the app running on the local network.
-Other running instances of the app on the network are displayed in the UI with their hostname and an OS icon.
+Other running instances of the app on the network are displayed in the CLI for now, GUI display is in progress.
 
 ## What's next?
 
