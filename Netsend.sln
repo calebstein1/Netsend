@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netsend.BackgroundServices"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Netsend.Models", "Netsend.Models\Netsend.Models.fsproj", "{7E62C8D0-893E-4870-B051-E34F02E74D64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netsend.UI.Common", "Netsend.UI.Common\Netsend.UI.Common.csproj", "{F5C2D5AC-E268-40F3-955A-E112FF21963B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netsend.UI.Common", "Netsend.UI.Common\Netsend.UI.Common.csproj", "{D6991B7D-7680-431A-B5A3-507841F28CC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +26,9 @@ Global
 		{7E62C8D0-893E-4870-B051-E34F02E74D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E62C8D0-893E-4870-B051-E34F02E74D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E62C8D0-893E-4870-B051-E34F02E74D64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F5C2D5AC-E268-40F3-955A-E112FF21963B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5C2D5AC-E268-40F3-955A-E112FF21963B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5C2D5AC-E268-40F3-955A-E112FF21963B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5C2D5AC-E268-40F3-955A-E112FF21963B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6991B7D-7680-431A-B5A3-507841F28CC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6991B7D-7680-431A-B5A3-507841F28CC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6991B7D-7680-431A-B5A3-507841F28CC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6991B7D-7680-431A-B5A3-507841F28CC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
