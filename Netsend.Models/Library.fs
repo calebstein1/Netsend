@@ -7,3 +7,8 @@ type FoundClient = {
     Hostname: string
     OS: string
 }
+
+type FoundClientDisplay = {
+    Hostname: string
+    OS: string
+}

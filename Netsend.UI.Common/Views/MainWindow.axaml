@@ -3,6 +3,7 @@
         xmlns:vm="using:Netsend.UI.Common.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:Netsend.Models;assembly=Netsend.Models"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Netsend.UI.Common.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -14,7 +15,15 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    
+    <ListBox ItemsSource="{Binding DisplayCollection}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{Binding OS}"/>
+                    <TextBlock Text="{Binding Hostname}"/>
+                </StackPanel>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
 </Window>

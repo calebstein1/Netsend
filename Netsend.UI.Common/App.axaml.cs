@@ -1,4 +1,5 @@
 using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -12,6 +13,7 @@ namespace Netsend.UI.Common;
 
 public partial class App : Application
 {
+    private IHost? _host;
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -19,19 +21,25 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var builder = Host.CreateDefaultBuilder()
+        _host = Host.CreateDefaultBuilder()
             .ConfigureServices((hostContext, services) =>
             {
                 services.AddHostedService<Worker>();
-            });
-        var host = builder.Build();
-        host.StartAsync();
+            })
+            .Build();
+        _host.StartAsync().GetAwaiter().GetResult();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
             {
                 DataContext = new MainWindowViewModel(),
+            };
+
+            desktop.Exit += async (sender, e) =>
+            {
+                await _host.StopAsync();
+                _host.Dispose();
             };
         }
 

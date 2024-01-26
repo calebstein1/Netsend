@@ -36,7 +36,7 @@ public class Worker : BackgroundService
             // and that it's not just our local machine.
             var foundClient = NetworkDiscovery.FindService();
             var alreadyDiscovered = FoundClients.Any(c => c.Client.Address.Equals(foundClient.Address) ||
-                                                                      c.Client.Hostname.Equals(foundClient.Hostname));
+                                                          c.Client.Hostname.Equals(foundClient.Hostname));
             var isLocalMachine = foundClient.Hostname.Equals(Dns.GetHostName()) ||
                                  _localIPs.Any(ip => ip.Equals(foundClient.Address));
             
