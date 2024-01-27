@@ -27,7 +27,7 @@ public class MainWindowViewModel : ViewModelBase
         // UI-specific things like the OS icon file. It also smooths over threading concerns between the Worker and UI threads.
         if (e.NewItems != null)
         {
-            foreach (ClientInfo c in e.NewItems)
+            foreach (IFoundClientExt c in e.NewItems)
             {
                 // I find switch expressions to be more clear than big if/else if/else blocks; this is just grabbing the proper
                 // icon file based in the information in the OS string.
@@ -43,8 +43,12 @@ public class MainWindowViewModel : ViewModelBase
             }
         }
 
+        // We're using the interface IFoundClientExt here for clarity, since technically c and d are of different types
+        // (ClientInfo and FoundClientDisplay, respectively), but they both implement the Client property as returning
+        // a FoundClient object (hence IFoundClientExt -- FoundClient with extensions). It's not strictly-speaking necessary,
+        // but I find the cognitive load lower than trying to figure out why we're comparing ClientInfo with FoundClientDisplay.
         if (e.OldItems == null) return;
-        foreach (ClientInfo c in e.OldItems)
+        foreach (IFoundClientExt c in e.OldItems)
         {
             var itemToRemove = DisplayCollection.FirstOrDefault(d =>
                 Equals(d.Client.Hostname, c.Client.Hostname) && Equals(d.Client.Address, c.Client.Address));
