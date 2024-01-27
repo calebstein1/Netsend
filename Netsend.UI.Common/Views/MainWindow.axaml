@@ -21,7 +21,10 @@
             <DataTemplate>
                 <StackPanel Orientation="Horizontal">
                     <Image Height="64" Width="64" Margin="8" Source="{Binding IconPath}"/>
-                    <TextBlock VerticalAlignment="Center" Text="{Binding Hostname}"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Client.Hostname}"/>
+                        <TextBlock Text="{Binding Client.Address}"/>
+                    </StackPanel>
                 </StackPanel>
             </DataTemplate>
         </ListBox.ItemTemplate>

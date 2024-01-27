@@ -11,7 +11,7 @@ namespace Netsend.UI.Common.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     public ObservableCollection<FoundClientDisplay> DisplayCollection { get; }
-    private const string BaseIconPath = "avares://Netsend.UI.Common/Assets/";
+    private const string BaseIconPath = "avares://Netsend.UI.Common/Assets";
 
     public MainWindowViewModel()
     {
@@ -32,9 +32,9 @@ public class MainWindowViewModel : ViewModelBase
                     { } a when a.Contains("OSX") => "apple.png",
                     _ => "tencent-qq.png"
                 };
-                var iconPath = ImageHelper.LoadFromResource(new Uri($"{BaseIconPath}{iconFile}"));
+                var iconPath = ImageHelper.LoadFromResource(new Uri($"{BaseIconPath}/{iconFile}"));
                 
-                DisplayCollection.Add(new FoundClientDisplay(c.Client.Hostname, iconPath));
+                DisplayCollection.Add(new FoundClientDisplay(c.Client, iconPath));
             }
         }
 
@@ -42,7 +42,7 @@ public class MainWindowViewModel : ViewModelBase
         foreach (ClientInfo c in e.OldItems)
         {
             var itemToRemove = DisplayCollection.FirstOrDefault(d =>
-                d.Hostname == c.Client.Hostname);
+                Equals(d.Client.Hostname, c.Client.Hostname) && Equals(d.Client.Address, c.Client.Address));
             if (itemToRemove != null)
                 DisplayCollection.Remove(itemToRemove);
         }

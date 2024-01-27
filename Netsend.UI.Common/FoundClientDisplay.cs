@@ -1,9 +1,10 @@
 using Avalonia.Media.Imaging;
+using Netsend.Models;
 
 namespace Netsend.UI.Common;
 
-public class FoundClientDisplay(string hostname, Bitmap iconPath)
+public class FoundClientDisplay(FoundClient client, Bitmap iconPath)
 {
-    public string Hostname { get; } = hostname;
+    public FoundClient Client { get; } = client;
     public Bitmap IconPath { get; } = iconPath;
 }
