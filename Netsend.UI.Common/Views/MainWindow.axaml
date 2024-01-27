@@ -8,7 +8,7 @@
         x:Class="Netsend.UI.Common.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Netsend.UI.Common">
+        Title="Netsend">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -19,9 +19,9 @@
     <ListBox ItemsSource="{Binding DisplayCollection}">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="{Binding OS}"/>
-                    <TextBlock Text="{Binding Hostname}"/>
+                <StackPanel Orientation="Horizontal">
+                    <Image Height="64" Width="64" Margin="8" Source="{Binding IconPath}"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Hostname}"/>
                 </StackPanel>
             </DataTemplate>
         </ListBox.ItemTemplate>

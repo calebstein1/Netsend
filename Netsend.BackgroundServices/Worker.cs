@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Net;
-using Netsend.Models;
 using Netsend.Networking;
 
 namespace Netsend.BackgroundServices;
@@ -10,7 +9,7 @@ public class Worker : BackgroundService
     public static ObservableCollection<ClientInfo> FoundClients { get; } = [];
     private List<ClientInfo> _clientsToDelete = [];
     private int _pingCounter;
-    private IPAddress[] _localIPs = Dns.GetHostAddresses(Dns.GetHostName());
+    private readonly IPAddress[] _localIPs = Dns.GetHostAddresses(Dns.GetHostName());
     private readonly ILogger<Worker> _logger;
 
     public Worker(ILogger<Worker> logger)
