@@ -26,7 +26,14 @@ Ultimately there will be additional UI libraries (Netsend.UI.Windows, Netsend.UI
 ## Progress
 
 Currently, the app runs, advertises itself on the local network over UDP, and will discover other instances of the app running on the local network.
-Other running instances of the app on the network are displayed in the CLI for now, GUI display is in progress.
+Other running app clients on the network are displayed in the GUI with their hostnames and an OS-specific icon.
+
+## Building
+
+Netsend depends on .NET 8, but besides that one dependency, all it should take is a clone of the repository and a `dotnet run` in the Netsend.UI.Common project to get it all going.
+I've built and run the app on both Linux and Windows.
+MacOS should work as well, but it's not been tested yet.
+I'm not sure if .NET supports BSD these days, but _if_ it does, and _if_ this builds there, the BSD-heads out there will have to live with the fact that they'll show up as a Linux icon to other clients :laughing:
 
 ## What's next?
 
