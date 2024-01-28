@@ -12,7 +12,7 @@ public static class NetworkDiscovery
     private static readonly UdpClient ReceivingUdpClient = new(_port);
     private static IPEndPoint _remoteIpEndPoint = new(IPAddress.Any, 0);
     
-    private static readonly string Hostname= Dns.GetHostName();
+    private static readonly string Hostname = Dns.GetHostName();
     private static readonly string OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
     private static readonly byte[] Data = $"{Hostname},{OperatingSystem}".Select(c => (byte)c).ToArray();
     
