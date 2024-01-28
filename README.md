@@ -32,8 +32,9 @@ Other running app clients on the network are displayed in the GUI with their hos
 
 Netsend depends on .NET 8, but besides that one dependency, all it should take is a clone of the repository and a `dotnet run` in the Netsend.UI.Common project to get it all going.
 I've built and run the app on both Linux and Windows.
-MacOS should work as well, but it's not been tested yet.
-I'm not sure if .NET supports BSD these days, but _if_ it does, and _if_ this builds there, the BSD-heads out there will have to live with the fact that they'll show up as a Linux icon to other clients :laughing:
+It builds but fails to run on MacOS at the moment, something about the part of Netsend.BackgroundServices that gets a list of the local machine IP addresses.
+I'm not sure if this is some permissions issue with the OS blocking access, or if that specific function is just unavailable on MacOS, but either way, I'll have that issue buttoned up one way or another prior to release.
+I don't think .NET supports BSD yet, but _if_ it does, and _if_ this builds there, the BSD-heads out there will have to live with the fact that they'll show up as a Linux icon to other clients :laughing:
 
 ## What's next?
 
