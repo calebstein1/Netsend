@@ -2,15 +2,22 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using Avalonia.Platform;
 using Netsend.BackgroundServices;
 using Netsend.Models;
+using ReactiveUI;
 
 namespace Netsend.UI.Common.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    private string _status = "Welcome to Netsend";
+    public string Status
+    {
+        get => _status;
+        set => this.RaiseAndSetIfChanged(ref _status, value);
+    }
     public ObservableCollection<FoundClientDisplay> DisplayCollection { get; }
+
     private const string BaseIconPath = "avares://Netsend.UI.Common/Assets";
 
     public MainWindowViewModel()
@@ -39,7 +46,7 @@ public class MainWindowViewModel : ViewModelBase
                 };
                 var iconPath = ImageHelper.LoadFromResource(new Uri($"{BaseIconPath}/{iconFile}"));
                 
-                DisplayCollection.Add(new FoundClientDisplay(c.Client, iconPath));
+                DisplayCollection.Add(new FoundClientDisplay(c.Client, iconPath, this));
             }
         }
 
@@ -55,5 +62,10 @@ public class MainWindowViewModel : ViewModelBase
             if (itemToRemove != null)
                 DisplayCollection.Remove(itemToRemove);
         }
+    }
+
+    internal void ResetStatus()
+    {
+        Status = "Welcome to Netsend";
     }
 }
