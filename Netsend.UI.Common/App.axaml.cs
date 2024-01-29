@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Netsend.UI.Common.ViewModels;
 using Netsend.UI.Common.Views;
 using Netsend.BackgroundServices;
+using Netsend.Networking;
 
 namespace Netsend.UI.Common;
 
@@ -40,6 +41,7 @@ public partial class App : Application
             {
                 await _host.StopAsync();
                 _host.Dispose();
+                NetworkDiscovery.ShutdownService();
             };
         }
 

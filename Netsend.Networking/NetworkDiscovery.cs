@@ -28,4 +28,9 @@ public static class NetworkDiscovery
 
         return new FoundClient(_remoteIpEndPoint.Address, returnData[0], returnData[1]);
     }
+
+    public static void ShutdownService()
+    {
+        UdpClient.Close();
+    }
 }
