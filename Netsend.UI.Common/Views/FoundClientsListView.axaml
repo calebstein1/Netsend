@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Netsend.UI.Common.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Netsend.UI.Common.Views.FoundClientsListView"
+             x:DataType="vm:FoundClientsListViewModel">
+    
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Status}" Margin="8"/>
+        <ListBox ItemsSource="{Binding DisplayCollection}" HorizontalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                            <Image Height="64" Width="64" Margin="8" Source="{Binding IconPath}"/>
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Client.Hostname}"/>
+                                <TextBlock Text="{Binding Client.Address}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Right" 
+                                    Orientation="Vertical" 
+                                    HorizontalAlignment="Right" 
+                                    MaxWidth="240">
+                            <Button HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    Margin="8"
+                                    Command="{Binding SendFileCommand}"
+                                    CommandParameter="{Binding}">
+                                Send File...
+                            </Button>
+                            <Button HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    Margin="8"
+                                    Command="{Binding SendDirectoryCommand}"
+                                    CommandParameter="{Binding}">
+                                Send Directory...
+                            </Button>
+                        </StackPanel>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</UserControl>

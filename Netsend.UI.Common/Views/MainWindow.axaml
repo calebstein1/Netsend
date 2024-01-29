@@ -4,32 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:views="clr-namespace:Netsend.UI.Common.Views"
         x:Class="Netsend.UI.Common.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="Netsend">
-
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-    
-    <StackPanel Orientation="Vertical">
-        <TextBlock Text="{Binding Status}" Margin="8"/>
-        <ListBox ItemsSource="{Binding DisplayCollection}" HorizontalAlignment="Stretch">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Height="64" Width="64" Margin="8" Source="{Binding IconPath}"/>
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Client.Hostname}"/>
-                            <TextBlock Text="{Binding Client.Address}"/>
-                        </StackPanel>
-                        <Button HorizontalAlignment="Right" Margin="8" Command="{Binding SendFileCommand}" CommandParameter="{Binding}">Send File...</Button>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </StackPanel>
+        
+        <views:FoundClientsListView DataContext="{Binding FoundClientsList}"/>
 </Window>
