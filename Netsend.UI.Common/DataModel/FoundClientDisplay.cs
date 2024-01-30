@@ -15,6 +15,8 @@ public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClient
     public Bitmap IconPath { get; } = iconPath;
     private FoundClientsListViewModel ViewModel { get; } = viewModel;
 
+    // I really don't like having all this logic in the DataModel, but try as I might, I haven't been able to make anything
+    // work as cleanly as this. It's unfortunate, but for now this is just how it has to be.
     public ReactiveCommand<FoundClientDisplay, Task> SendFileCommand { get; } =
         ReactiveCommand.Create<FoundClientDisplay, Task>(SendFileAsync);
     public ReactiveCommand<FoundClientDisplay, Task> SendDirectoryCommand { get; } =

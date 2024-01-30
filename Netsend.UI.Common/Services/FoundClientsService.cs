@@ -2,7 +2,6 @@ using System;
 using System.Collections.Specialized;
 using System.Linq;
 using Netsend.Models;
-using Netsend.UI.Common.DataModel;
 using Netsend.UI.Common.ViewModels;
 
 namespace Netsend.UI.Common.Services;
@@ -30,7 +29,7 @@ public class FoundClientsService
                 };
                 var iconPath = ImageHelper.LoadFromResource(new Uri($"{BaseIconPath}/{iconFile}"));
                 
-                viewModel.DisplayCollection.Add(new FoundClientDisplay(c.Client, iconPath, viewModel));
+                viewModel.DisplayCollection.Add(viewModel.Factory.Create(c.Client, iconPath));
             }
         }
 

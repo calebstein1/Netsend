@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using DynamicData.Binding;
 using Netsend.BackgroundServices;
+using Netsend.Models;
 using Netsend.UI.Common.DataModel;
 using Netsend.UI.Common.Services;
 using ReactiveUI;
@@ -11,10 +12,13 @@ namespace Netsend.UI.Common.ViewModels;
 
 public class FoundClientsListViewModel : ViewModelBase
 {
+    public readonly FoundClientsDisplayFactory Factory;
+    
     public FoundClientsListViewModel()
     {
         Worker.FoundClients.CollectionChanged += (sender, e) =>
             FoundClientsService.ClientsUpdated(sender, e, this);
+        Factory = new FoundClientsDisplayFactory(this);
     }
     
     private ObservableCollection<FoundClientDisplay> _displayCollection = [];
