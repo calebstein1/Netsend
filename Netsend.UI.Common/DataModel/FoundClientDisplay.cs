@@ -1,8 +1,11 @@
 using System;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using Netsend.Models;
 using Netsend.UI.Common.ViewModels;
 using ReactiveUI;
@@ -25,6 +28,12 @@ public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClient
     private static async Task SendFileAsync(FoundClientDisplay client)
     {
         client.ViewModel.Status = $"Sending file to {client.Client.Hostname}...";
+        var storageProvider = new Window().StorageProvider;
+        var file = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Netsend"
+        });
+        client.ViewModel.Status = $"You selected {file[0].Path}";
         await Task.Delay(5000); // This is to simulate the eventual file-sending logic
         client.ViewModel.ResetStatus();
     }
