@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Net;
+using System.Reflection.Metadata.Ecma335;
+using Netsend.Models;
 using Netsend.Networking;
 
 namespace Netsend.BackgroundServices;
@@ -10,12 +12,6 @@ public class Worker : BackgroundService
     private List<ClientInfo> _clientsToDelete = [];
     private int _pingCounter;
     private readonly IPAddress[] _localIPs = Dns.GetHostAddresses(Dns.GetHostName());
-    private readonly ILogger<Worker> _logger;
-
-    public Worker(ILogger<Worker> logger)
-    {
-        _logger = logger;
-    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -29,11 +25,11 @@ public class Worker : BackgroundService
                 FoundClients.Remove(client);
             }
 
-            NetworkDiscovery.BroadcastService();
+            await NetworkDiscovery.BroadcastServiceAsync();
             
             // Once we find another client on the network, we need to make sure that we haven't already discovered the client,
             // and that it's not just our local machine.
-            var foundClient = NetworkDiscovery.FindService();
+            var foundClient = NetworkDiscovery.FindServiceAsync().Result;
             var alreadyDiscovered = FoundClients.Any(c => c.Client.Address.Equals(foundClient.Address) ||
                                                           c.Client.Hostname.Equals(foundClient.Hostname));
             var isLocalMachine = foundClient.Hostname.Equals(Dns.GetHostName()) ||
