@@ -18,10 +18,17 @@ public class TcpTools
         await using var stream = client.GetStream();
 
         var buffer = new byte[1_024];
-        var received = await stream.ReadAsync(buffer);
+        var isAcceptedLen = await stream.ReadAsync(buffer);
 
-        var message = Encoding.UTF8.GetString(buffer, 0, received);
-        TcpStatus.Value = message;
+        var isAcceptedStr = Encoding.UTF8.GetString(buffer, 0, isAcceptedLen);
+        if (Equals(isAcceptedStr, "accepted"))
+        {
+            var fileName = filePath.ToString();
+            var fileNameByes = Encoding.UTF8.GetBytes(fileName);
+            await stream.WriteAsync(fileNameByes);
+        }
+
+        TcpStatus.Value = $"Sent {filePath.ToString()} to system at {ipAddress.ToString()}";
     }
 
     public async Task ListenForRequestsAsync()
@@ -38,9 +45,17 @@ public class TcpTools
                 using var handler = await listener.AcceptTcpClientAsync();
                 await using var stream = handler.GetStream();
 
-                var message = $"Hey, this is {Dns.GetHostName()}!";
-                var msgBytes = Encoding.UTF8.GetBytes(message);
-                await stream.WriteAsync(msgBytes);
+                var isAccepted = "accepted";
+                var isAcceptedBytes = Encoding.UTF8.GetBytes(isAccepted);
+                await stream.WriteAsync(isAcceptedBytes);
+                
+                var buffer = new byte[1_024];
+                var fileNameLen = await stream.ReadAsync(buffer);
+                
+                var fileNameStr = Encoding.UTF8.GetString(buffer, 0, fileNameLen);
+                TcpStatus.Value = $"Got {fileNameStr} from remote system";
+                await Task.Delay(5000);
+                TcpStatus.Value = "Netsend ready";
             }
             finally
             {

@@ -23,8 +23,6 @@ public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClient
     // work as cleanly as this. It's unfortunate, but for now this is just how it has to be.
     public ReactiveCommand<FoundClientDisplay, Task> SendFileCommand { get; } =
         ReactiveCommand.Create<FoundClientDisplay, Task>(SendFileAsync);
-    /*public ReactiveCommand<FoundClientDisplay, Task> SendDirectoryCommand { get; } =
-        ReactiveCommand.Create<FoundClientDisplay, Task>(SendDirectoryAsync);*/
     
     private static async Task SendFileAsync(FoundClientDisplay client)
     {
@@ -36,14 +34,7 @@ public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClient
         });
         client.ViewModel.Status = $"You selected {file[0].Path}";
         await client.ViewModel.Tcp.SendRequestAsync(client.Client.Address, file[0].Path);
-        await Task.Delay(5000); // This is to simulate the eventual file-sending logic
-        client.ViewModel.ResetStatus();
-    }
-    
-    private static async Task SendDirectoryAsync(FoundClientDisplay client)
-    {
-        client.ViewModel.Status = $"Sending directory to {client.Client.Hostname}...";
-        await Task.Delay(5000); // This is to simulate the eventual file-sending logic
+        await Task.Delay(5000);
         client.ViewModel.ResetStatus();
     }
 }
