@@ -8,5 +8,11 @@ type FoundClient = {
     OS : string
 }
 
+type FileRequest = {
+    Destination : IPEndPoint
+    File : string
+    FileChecksum : string
+}
+
 type IFoundClientExt =
     abstract member Client : FoundClient with get

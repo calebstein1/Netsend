@@ -8,6 +8,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Netsend.Models;
 using Netsend.UI.Common.ViewModels;
+using Netsend.Networking;
 using ReactiveUI;
 
 namespace Netsend.UI.Common.DataModel;
@@ -22,8 +23,8 @@ public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClient
     // work as cleanly as this. It's unfortunate, but for now this is just how it has to be.
     public ReactiveCommand<FoundClientDisplay, Task> SendFileCommand { get; } =
         ReactiveCommand.Create<FoundClientDisplay, Task>(SendFileAsync);
-    public ReactiveCommand<FoundClientDisplay, Task> SendDirectoryCommand { get; } =
-        ReactiveCommand.Create<FoundClientDisplay, Task>(SendDirectoryAsync);
+    /*public ReactiveCommand<FoundClientDisplay, Task> SendDirectoryCommand { get; } =
+        ReactiveCommand.Create<FoundClientDisplay, Task>(SendDirectoryAsync);*/
     
     private static async Task SendFileAsync(FoundClientDisplay client)
     {
@@ -34,6 +35,7 @@ public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClient
             Title = "Netsend"
         });
         client.ViewModel.Status = $"You selected {file[0].Path}";
+        await client.ViewModel.Tcp.SendRequestAsync(client.Client.Address, file[0].Path);
         await Task.Delay(5000); // This is to simulate the eventual file-sending logic
         client.ViewModel.ResetStatus();
     }

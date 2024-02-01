@@ -7,9 +7,9 @@ namespace Netsend.Networking;
 
 public static class NetworkDiscovery
 {
-    private static int _port = 54545;
+    internal static int Port = 54545;
     private static readonly UdpClient UdpClient = new();
-    private static readonly UdpClient ReceivingUdpClient = new(_port);
+    private static readonly UdpClient ReceivingUdpClient = new(Port);
     
     private static readonly string Hostname = Dns.GetHostName();
     private static readonly string OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
@@ -17,7 +17,7 @@ public static class NetworkDiscovery
     
     public static async Task BroadcastServiceAsync()
     {
-        await UdpClient.SendAsync(Data, Data.Length, "255.255.255.255", _port);
+        await UdpClient.SendAsync(Data, Data.Length, "255.255.255.255", Port);
     }
 
     public static async Task<FoundClient> FindServiceAsync()

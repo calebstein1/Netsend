@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using DynamicData.Binding;
 using Netsend.BackgroundServices;
 using Netsend.Models;
+using Netsend.Networking;
 using Netsend.UI.Common.DataModel;
 using Netsend.UI.Common.Services;
 using ReactiveUI;
@@ -13,11 +14,15 @@ namespace Netsend.UI.Common.ViewModels;
 public class FoundClientsListViewModel : ViewModelBase
 {
     public readonly FoundClientsDisplayFactory Factory;
+    public readonly TcpTools Tcp = new();
     
     public FoundClientsListViewModel()
     {
         Worker.FoundClients.CollectionChanged += (sender, e) =>
             FoundClientsService.ClientsUpdated(sender, e, this);
+        Tcp.ListenForRequestsAsync();
+        Tcp.TcpStatus.PropertyChanged += (sender, e) =>
+            Status = Tcp.TcpStatus.Value;
         Factory = new FoundClientsDisplayFactory(this);
     }
     
