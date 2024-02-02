@@ -24,7 +24,7 @@ public class FoundClientsService
                 var iconFile = c.Client.OS switch
                 {
                     { } a when a.Contains("Windows") => "windows.png",
-                    { } a when a.Contains("Mac") => "apple.png",
+                    { } a when a.Contains("Darwin") => "apple.png",
                     _ => "tencent-qq.png"
                 };
                 var iconPath = ImageHelper.LoadFromResource(new Uri($"{BaseIconPath}/{iconFile}"));
