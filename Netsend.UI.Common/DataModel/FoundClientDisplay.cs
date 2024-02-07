@@ -1,23 +1,18 @@
-using System;
-using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Netsend.Models;
 using Netsend.UI.Common.ViewModels;
-using Netsend.Networking;
 using ReactiveUI;
 
 namespace Netsend.UI.Common.DataModel;
 
-public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClientsListViewModel viewModel) : IFoundClientExt
+public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClientsListViewModel vm) : IFoundClientExt
 {
     public FoundClient Client { get; } = client;
     public Bitmap IconPath { get; } = iconPath;
-    private FoundClientsListViewModel ViewModel { get; } = viewModel;
+    private FoundClientsListViewModel Vm { get; } = vm;
 
     // I really don't like having all this logic in the DataModel, but try as I might, I haven't been able to make anything
     // work as cleanly as this. It's unfortunate, but for now this is just how it has to be.
@@ -26,15 +21,15 @@ public class FoundClientDisplay(FoundClient client, Bitmap iconPath, FoundClient
     
     private static async Task SendFileAsync(FoundClientDisplay client)
     {
-        client.ViewModel.Status = $"Sending file to {client.Client.Hostname}...";
+        client.Vm.Status = $"Sending file to {client.Client.Hostname}...";
         var storageProvider = new Window().StorageProvider;
         var file = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Netsend"
         });
-        client.ViewModel.Status = $"You selected {file[0].Path}";
-        await client.ViewModel.Tcp.SendRequestAsync(client.Client.Address, file[0].Path);
+        client.Vm.Status = $"You selected {file[0].Path}";
+        await client.Vm.Tcp.SendRequestAsync(client.Client.Address, file[0].Path);
         await Task.Delay(5000);
-        client.ViewModel.ResetStatus();
+        client.Vm.ResetStatus();
     }
 }

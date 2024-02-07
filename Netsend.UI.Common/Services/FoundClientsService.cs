@@ -10,7 +10,7 @@ public class FoundClientsService
 {
     private const string BaseIconPath = "avares://Netsend.UI.Common/Assets";
 
-    internal static void ClientsUpdated(object? sender, NotifyCollectionChangedEventArgs e, FoundClientsListViewModel viewModel)
+    internal static void ClientsUpdated(object? sender, NotifyCollectionChangedEventArgs e, FoundClientsListViewModel vm)
     {
         // The idea here is to track our own list to display, rather than pull the list from BackgroundServices.Worker directly.
         // This is good because we don't need things like the pingCounter in the UI, and the backend logic doesn't care about
@@ -29,7 +29,7 @@ public class FoundClientsService
                 };
                 var iconPath = ImageHelper.LoadFromResource(new Uri($"{BaseIconPath}/{iconFile}"));
                 
-                viewModel.DisplayCollection.Add(viewModel.Factory.Create(c.Client, iconPath));
+                vm.DisplayCollection.Add(vm.Factory.Create(c.Client, iconPath));
             }
         }
 
@@ -40,10 +40,10 @@ public class FoundClientsService
         if (e.OldItems == null) return;
         foreach (IFoundClientExt c in e.OldItems)
         {
-            var itemToRemove = viewModel.DisplayCollection.FirstOrDefault(d =>
+            var itemToRemove = vm.DisplayCollection.FirstOrDefault(d =>
                 Equals(d.Client.Hostname, c.Client.Hostname) && Equals(d.Client.Address, c.Client.Address));
             if (itemToRemove != null)
-                viewModel.DisplayCollection.Remove(itemToRemove);
+                vm.DisplayCollection.Remove(itemToRemove);
         }
     }
 }

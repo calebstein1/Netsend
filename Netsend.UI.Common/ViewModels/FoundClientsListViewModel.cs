@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using DynamicData.Binding;
+using System.Threading.Tasks;
 using Netsend.BackgroundServices;
-using Netsend.Models;
 using Netsend.Networking;
 using Netsend.UI.Common.DataModel;
 using Netsend.UI.Common.Services;
@@ -20,9 +17,9 @@ public class FoundClientsListViewModel : ViewModelBase
     {
         Worker.FoundClients.CollectionChanged += (sender, e) =>
             FoundClientsService.ClientsUpdated(sender, e, this);
-        Tcp.ListenForRequestsAsync();
+        Task.Run(() => Tcp.ListenForRequestsAsync());
         Tcp.TcpStatus.PropertyChanged += (sender, e) =>
-            Status = Tcp.TcpStatus.Value;
+            Status = Tcp.TcpStatus.Value ?? string.Empty;
         Factory = new FoundClientsDisplayFactory(this);
     }
     
