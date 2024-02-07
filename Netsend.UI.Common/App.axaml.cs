@@ -28,7 +28,7 @@ public partial class App : Application
                 services.AddHostedService<Worker>();
             })
             .Build();
-        _host.StartAsync().GetAwaiter().GetResult();
+        Task.Run(() => _host.StartAsync());
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
