@@ -8,6 +8,7 @@ public class TcpTools
 {
     public readonly ObservableString TcpStatus = new();
     private int _port = NetworkDiscovery.Port;
+    
     public async Task SendRequestAsync(IPAddress ipAddress, Uri filePath)
     {
         var ipEndPoint = new IPEndPoint(ipAddress, _port);
@@ -17,11 +18,10 @@ public class TcpTools
         await client.ConnectAsync(ipEndPoint);
         await using var stream = client.GetStream();
 
-        var buffer = new byte[1_024];
-        var isAcceptedLen = await stream.ReadAsync(buffer);
+        var conSuccessBuffer = new byte[1];
+        var bytesRead = await stream.ReadAsync(conSuccessBuffer);
 
-        var isAcceptedStr = Encoding.UTF8.GetString(buffer, 0, isAcceptedLen);
-        if (Equals(isAcceptedStr, "accepted"))
+        if (Equals(bytesRead, 1))
         {
             var fileName = filePath.ToString();
             var fileNameByes = Encoding.UTF8.GetBytes(fileName);
@@ -45,15 +45,14 @@ public class TcpTools
                 using var handler = await listener.AcceptTcpClientAsync();
                 await using var stream = handler.GetStream();
 
-                var isAccepted = "accepted";
-                var isAcceptedBytes = Encoding.UTF8.GetBytes(isAccepted);
-                await stream.WriteAsync(isAcceptedBytes);
+                var isConnected = new byte[] { 1 };
+                await stream.WriteAsync(isConnected);
                 
-                var buffer = new byte[1_024];
-                var fileNameLen = await stream.ReadAsync(buffer);
+                var checksumBuffer = new byte[1_024];
+                var checksumLen = await stream.ReadAsync(checksumBuffer);
                 
-                var fileNameStr = Encoding.UTF8.GetString(buffer, 0, fileNameLen);
-                TcpStatus.Value = $"Got {fileNameStr} from remote system";
+                var checksum = Encoding.UTF8.GetString(checksumBuffer, 0, checksumLen);
+                TcpStatus.Value = $"Got {checksum} from remote system";
                 await Task.Delay(5000);
                 TcpStatus.Value = "Netsend ready";
             }
