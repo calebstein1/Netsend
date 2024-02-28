@@ -16,7 +16,7 @@ public static class NetworkDiscovery
         Hostname = Dns.GetHostName(),
         OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription
     };
-    private static readonly byte[] Data = StructUtils.GetBytes(Identity);
+    private static readonly byte[] Data = StructUtils.GetBytesFromStruct(Identity);
     
     public static async Task BroadcastServiceAsync()
     {
@@ -26,7 +26,7 @@ public static class NetworkDiscovery
     public static async Task<FoundClient> FindServiceAsync()
     {
         var receiveBytes = await ReceivingUdpClient.ReceiveAsync();
-        var returnData = StructUtils.FromBytes<Identity>(receiveBytes.Buffer, receiveBytes.Buffer.Length);
+        var returnData = StructUtils.GetStructFromBytes<Identity>(receiveBytes.Buffer, receiveBytes.Buffer.Length);
 
         return new FoundClient(receiveBytes.RemoteEndPoint.Address, returnData.Hostname, returnData.OperatingSystem);
     }

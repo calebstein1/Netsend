@@ -20,9 +20,9 @@ public class TcpTools
         await using var stream = client.GetStream();
 
         var conSuccessBuffer = new byte[1];
-        var bytesRead = await stream.ReadAsync(conSuccessBuffer);
+        if (await stream.ReadAsync(conSuccessBuffer) != 1) throw new InvalidOperationException();
 
-        if (Equals(bytesRead, 1))
+        if (Equals(conSuccessBuffer[0], (byte)1))
         {
             TcpStatus.Value = "Generating transfer manifest...";
             var manifest = new Manifest
@@ -30,10 +30,20 @@ public class TcpTools
                 Filename = Path.GetFileName(filePath.LocalPath),
                 Filesize = new FileInfo(filePath.LocalPath).Length
             };
-            await stream.WriteAsync(StructUtils.GetBytes(manifest));
+            await stream.WriteAsync(StructUtils.GetBytesFromStruct(manifest));
         }
 
-        TcpStatus.Value = $"Sent {filePath.ToString()} to system at {ipAddress.ToString()}";
+        var remotePreparedBuffer = new byte[1];
+        if (await stream.ReadAsync(remotePreparedBuffer) != 1) throw new InvalidOperationException();
+
+        if (Equals(remotePreparedBuffer[0], (byte)1))
+        {
+            TcpStatus.Value = $"Ok... sending {filePath.LocalPath}";
+        }
+        else
+        {
+            TcpStatus.Value = "Remote client rejected transmission";
+        }
     }
 
     public async Task ListenForRequestsAsync()
@@ -50,14 +60,30 @@ public class TcpTools
                 using var handler = await listener.AcceptTcpClientAsync();
                 await using var stream = handler.GetStream();
 
-                var isConnected = new byte[] { 1 };
-                await stream.WriteAsync(isConnected);
+                var successValue = new byte[] { 1 };
+                await stream.WriteAsync(successValue);
                 
                 var manifestBuffer = new byte[1_024];
                 var manifestSize = await stream.ReadAsync(manifestBuffer);
 
-                var manifest = StructUtils.FromBytes<Manifest>(manifestBuffer, manifestSize);
-                TcpStatus.Value = $"Got {manifest.Filename} from remote system, size: {manifest.Filesize.ToString()} bytes";
+                var manifest = StructUtils.GetStructFromBytes<Manifest>(manifestBuffer, manifestSize);
+                var fileName = manifest.Filename;
+                var documentsDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create);
+                var prefix = 0;
+
+                while (Directory.GetFileSystemEntries(documentsDir, "*", SearchOption.TopDirectoryOnly)
+                       .Select(Path.GetFileName)
+                       .Contains(fileName))
+                {
+                    prefix++;
+                    fileName = $"{prefix}_{manifest.Filename}";
+                }
+                
+                TcpStatus.Value = $"Got {fileName} from remote system, size: {manifest.Filesize.ToString()} bytes";
+
+                var confirmOkToSend = new byte[] { 1 };
+                await stream.WriteAsync(confirmOkToSend);
+                
                 await Task.Delay(5000);
                 TcpStatus.Value = "Netsend ready";
             }

@@ -19,7 +19,7 @@ internal struct Manifest
 
 internal static class StructUtils
 {
-    internal static byte[] GetBytes<T>(T m) where T : notnull
+    internal static byte[] GetBytesFromStruct<T>(T m) where T : notnull
     {
         var size = Marshal.SizeOf(m);
         var a = new byte[size];
@@ -39,7 +39,7 @@ internal static class StructUtils
         return a;
     }
 
-    internal static T FromBytes<T>(byte[] a, int rSize) where T : new()
+    internal static T GetStructFromBytes<T>(byte[] a, int rSize) where T : new()
     {
         var m = new T();
         var size = Marshal.SizeOf(m);
