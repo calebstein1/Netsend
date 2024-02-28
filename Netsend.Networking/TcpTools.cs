@@ -36,7 +36,22 @@ public class TcpTools
 
         if (Equals(remotePreparedBuffer[0], (byte)1))
         {
-            TcpStatus.Value = $"Ok... sending {filePath.LocalPath}";
+            TcpStatus.Value = $"Sending {filePath.LocalPath}...";
+            var fileBytes = await File.ReadAllBytesAsync(filePath.LocalPath);
+            var fileBuffer = new byte[1_024];
+
+            var bytesLeft = fileBytes.Length;
+            var offset = 0;
+
+            while (bytesLeft > 0)
+            {
+                var bytesToWrite = Math.Min(fileBuffer.Length, bytesLeft);
+                Array.Copy(fileBytes, offset, fileBuffer, 0, bytesToWrite);
+                await stream.WriteAsync(fileBuffer);
+
+                offset += bytesToWrite;
+                bytesLeft -= bytesToWrite;
+            }
         }
         else
         {
@@ -76,14 +91,30 @@ public class TcpTools
                     prefix++;
                     fileName = $"{prefix}_{manifest.Filename}";
                 }
-                
-                TcpStatus.Value = $"Got {fileName} from remote system, size: {manifest.Filesize.ToString()} bytes";
+
+                var receivedBytes = new byte[manifest.Filesize];
 
                 var confirmOkToSend = new byte[] { 1 };
                 await stream.WriteAsync(confirmOkToSend);
+
+                TcpStatus.Value = "Receiving file...";
+
+                int bytesRead = 0, offset = 0;
+                while (bytesRead < manifest.Filesize)
+                {
+                    var bytesToRead = Math.Min(receivedBytes.Length - offset, 1024);
+                    var bytesReadThisChunk = await stream.ReadAsync(receivedBytes, offset, bytesToRead);
+
+                    if (bytesReadThisChunk == 0) break;
+
+                    bytesRead += bytesReadThisChunk;
+                    offset += bytesReadThisChunk;
+                }
+
+                TcpStatus.Value = $"Writing file to {Path.Combine(documentsDir, fileName)}...";
+                await File.WriteAllBytesAsync(Path.Combine(documentsDir, fileName), receivedBytes);
                 
-                await Task.Delay(5000);
-                TcpStatus.Value = "Netsend ready";
+                TcpStatus.Value = $"File written to {Path.Combine(documentsDir, fileName)}";
             }
             finally
             {
