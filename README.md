@@ -42,7 +42,8 @@ Ultimately there may be additional UI libraries (Netsend.UI.Windows, Netsend.UI.
 
 Currently, the app runs, advertises itself on the local network over UDP, and will discover other instances of the app running on the local network.
 Other running app clients on the network are displayed in the GUI with their hostnames and an OS-specific icon.
-The send file button opens a file selector, then establishes a TCP connection with the selected client and gets a simple message back, containing the client's hostname.
+The send file button opens a file selector, then establishes a TCP connection with the selected client and sends messages back and forth containing filename and size information.
+This is accomplished by serializing structs into byte arrays, rather than using a format like JSON.
 
 ## Building
 
@@ -56,6 +57,5 @@ I don't think .NET supports BSD yet, but _if_ it does, and _if_ this builds ther
 
 ## What's next?
 
-Now that TCP is working, next is being able to send JSON messages back and forth, rather than just a simple text response.
-Once that's working, that TCP connection will need to be used to transfer single files.
+Next step is implementing the actual file transfers.
 After that, I'll be extending the file transfer to allow for full directories.
