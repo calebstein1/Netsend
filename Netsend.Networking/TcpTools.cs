@@ -30,7 +30,7 @@ public class TcpTools
                 Filename = Path.GetFileName(filePath.LocalPath),
                 Filesize = new FileInfo(filePath.LocalPath).Length
             };
-            await stream.WriteAsync(GetBytes(manifest));
+            await stream.WriteAsync(StructUtils.GetBytes(manifest));
         }
 
         TcpStatus.Value = $"Sent {filePath.ToString()} to system at {ipAddress.ToString()}";
@@ -56,7 +56,7 @@ public class TcpTools
                 var manifestBuffer = new byte[1_024];
                 var manifestSize = await stream.ReadAsync(manifestBuffer);
 
-                var manifest = FromBytes(manifestBuffer, manifestSize);
+                var manifest = StructUtils.FromBytes<Manifest>(manifestBuffer, manifestSize);
                 TcpStatus.Value = $"Got {manifest.Filename} from remote system, size: {manifest.Filesize.ToString()} bytes";
                 await Task.Delay(5000);
                 TcpStatus.Value = "Netsend ready";
@@ -66,46 +66,5 @@ public class TcpTools
                 listener.Stop();
             }
         }
-    }
-
-    private static byte[] GetBytes(Manifest m)
-    {
-        var size = Marshal.SizeOf(m);
-        var a = new byte[size];
-
-        var p = IntPtr.Zero;
-        try
-        {
-            p = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(m, p, true);
-            Marshal.Copy(p, a, 0, size);
-        }
-        finally
-        {
-            Marshal.FreeHGlobal(p);
-        }
-
-        return a;
-    }
-
-    private static Manifest FromBytes(byte[] a, int rSize)
-    {
-        var m = new Manifest();
-        var size = Marshal.SizeOf(m);
-        if (!Equals(size, rSize)) throw new InvalidOperationException();
-
-        var p = IntPtr.Zero;
-        try
-        {
-            p = Marshal.AllocHGlobal(size);
-            Marshal.Copy(a, 0, p, size);
-            m = (Manifest)(Marshal.PtrToStructure(p, m.GetType()) ?? throw new InvalidOperationException());
-        }
-        finally
-        {
-            Marshal.FreeHGlobal(p);
-        }
-
-        return m;
     }
 }

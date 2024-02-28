@@ -11,9 +11,12 @@ public static class NetworkDiscovery
     private static readonly UdpClient UdpClient = new();
     private static readonly UdpClient ReceivingUdpClient = new(Port);
     
-    private static readonly string Hostname = Dns.GetHostName();
-    private static readonly string OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
-    private static readonly byte[] Data = $"{Hostname},{OperatingSystem}".Select(c => (byte)c).ToArray();
+    private static readonly Identity Identity = new ()
+    {
+        Hostname = Dns.GetHostName(),
+        OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription
+    };
+    private static readonly byte[] Data = StructUtils.GetBytes(Identity);
     
     public static async Task BroadcastServiceAsync()
     {
@@ -23,9 +26,9 @@ public static class NetworkDiscovery
     public static async Task<FoundClient> FindServiceAsync()
     {
         var receiveBytes = await ReceivingUdpClient.ReceiveAsync();
-        var returnData = Encoding.ASCII.GetString(receiveBytes.Buffer).Split(',');
+        var returnData = StructUtils.FromBytes<Identity>(receiveBytes.Buffer, receiveBytes.Buffer.Length);
 
-        return new FoundClient(receiveBytes.RemoteEndPoint.Address, returnData[0], returnData[1]);
+        return new FoundClient(receiveBytes.RemoteEndPoint.Address, returnData.Hostname, returnData.OperatingSystem);
     }
 
     public static void ShutdownService()
