@@ -1,4 +1,3 @@
-using System.Net;
 using System.Runtime.InteropServices;
 
 namespace Netsend.Networking;
