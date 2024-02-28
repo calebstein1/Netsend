@@ -40,10 +40,7 @@ Ultimately there may be additional UI libraries (Netsend.UI.Windows, Netsend.UI.
 
 ## Progress
 
-Currently, the app runs, advertises itself on the local network over UDP, and will discover other instances of the app running on the local network.
-Other running app clients on the network are displayed in the GUI with their hostnames and an OS-specific icon.
-The send file button opens a file selector, then establishes a TCP connection with the selected client and sends messages back and forth containing filename and size information.
-This is accomplished by serializing structs into byte arrays, rather than using a format like JSON.
+All the core functionality is there, clients are discoverable over the network, and basic single-file transfers are working well.
 
 ## Building
 
@@ -57,5 +54,6 @@ I don't think .NET supports BSD yet, but _if_ it does, and _if_ this builds ther
 
 ## What's next?
 
-Next step is implementing the actual file transfers.
-After that, I'll be extending the file transfer to allow for full directories.
+Since the core functionality works, now it's time for some more quality of life features.
+I'd like for each file chunk to be sent with a checksum, for instance, and it would be nice to allow a receiver to decline an unwanted transfer.
+Beyond that, sending multiple files at once, or full directories, would be cool, and a fun excuse to play with semaphores for parallel transfers!
