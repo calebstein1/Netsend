@@ -40,9 +40,7 @@ Ultimately there may be additional UI libraries (Netsend.UI.Windows, Netsend.UI.
 
 ## Progress
 
-~~All the core functionality is there, clients are discoverable over the network, and basic single-file transfers are working well.~~
-File transfers are not working reliably.
-Need to figure out what's going on there.
+All the core functionality is there, clients are discoverable over the network, and basic single-file transfers are working well.
 
 ## Building
 
