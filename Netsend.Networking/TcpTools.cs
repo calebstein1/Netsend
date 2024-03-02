@@ -38,10 +38,10 @@ public class TcpTools
         {
             TcpStatus.Value = $"Sending {filePath.LocalPath}...";
             var fileBytes = await File.ReadAllBytesAsync(filePath.LocalPath);
+            var totalChunks = fileBytes.Length / 1024 + 1;
             var fileBuffer = new byte[1_024];
 
-            var bytesLeft = fileBytes.Length;
-            var offset = 0;
+            int bytesLeft = fileBytes.Length, offset = 0, chunksSent = 0;
 
             while (bytesLeft > 0)
             {
@@ -51,6 +51,9 @@ public class TcpTools
 
                 offset += bytesToWrite;
                 bytesLeft -= bytesToWrite;
+                chunksSent++;
+
+                TcpStatus.Value = $"Sent {chunksSent}/{totalChunks} chunks...";
             }
         }
         else
@@ -93,22 +96,23 @@ public class TcpTools
                 }
 
                 var receivedBytes = new byte[manifest.Filesize];
+                var totalChunks = manifest.Filesize / 1024 + 1;
 
                 var confirmOkToSend = new byte[] { 1 };
                 await stream.WriteAsync(confirmOkToSend);
 
-                TcpStatus.Value = "Receiving file...";
-
-                int bytesRead = 0, offset = 0;
-                while (bytesRead < manifest.Filesize)
+                int offset = 0, chunksReceived = 0;
+                while (offset < manifest.Filesize)
                 {
                     var bytesToRead = Math.Min(receivedBytes.Length - offset, 1024);
                     var bytesReadThisChunk = await stream.ReadAsync(receivedBytes, offset, bytesToRead);
 
                     if (bytesReadThisChunk == 0) break;
 
-                    bytesRead += bytesReadThisChunk;
                     offset += bytesReadThisChunk;
+                    chunksReceived++;
+
+                    TcpStatus.Value = $"Received {chunksReceived}/{totalChunks} chunks...";
                 }
 
                 TcpStatus.Value = $"Writing file to {Path.Combine(documentsDir, fileName)}...";
