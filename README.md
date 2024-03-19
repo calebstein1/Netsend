@@ -6,8 +6,7 @@ Netsend is a cross-platform clone of Apple's AirDrop, written in .NET
 
 ## Purpose
 
-This is meant as an exercise for me to learn .NET in the context of a more complex project.
-It's all still early on in development, so don't expect anything super functional at this point.
+This is meant as an exercise for me to learn .NET in the context of a slightly more complex project.
 
 ## Architecture
 
